@@ -1,6 +1,5 @@
 <?php
 /**
- * Primecare Doctors Slick Slider Plugin
  *
  * @link              https://primecare.com.hk/
  * @since             1.0.0
