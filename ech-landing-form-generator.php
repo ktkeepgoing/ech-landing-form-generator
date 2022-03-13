@@ -36,12 +36,6 @@ add_action('init', 'register_ech_lfg_styles');
 add_action('wp_enqueue_scripts', 'enqueue_ech_lfg_styles');
 
 
-//load more posts using ajax
-/*
-add_action('wp_ajax_nopriv_pl_ajax_load_posts', 'pl_ajax_load_posts');
-add_action('wp_ajax_pl_ajax_load_posts', 'pl_ajax_load_posts');
-*/
-
 // Register the shortcode
 add_shortcode('ech_lfg', 'ech_lfg_fun' );
 
