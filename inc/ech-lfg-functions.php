@@ -56,6 +56,7 @@ function ech_lfg_fun($atts){
 		'shop_label' => '*請選擇診所',		 // shop label
 		'has_textarea' => '0',				// has textarea field. 0 = false, 1 = true
 		'textarea_label' => '其他專業諮詢',	 // textarea label
+		'has_media_lead' => '0',			// "where did u hear from us" field. 0 = false, 1 = true
 		'brand' => null,					// for MSP, website name value
 		'tks_para' => null					// parameters need to pass to thank you page
 
@@ -125,7 +126,8 @@ function ech_lfg_fun($atts){
 	if ($has_textarea == "1") { $has_textarea_bool = true; } else { $has_textarea_bool = false; }
 	$textarea_label = htmlspecialchars(str_replace(' ', '', $paraArr['textarea_label']));
 
-
+	$has_media_lead = htmlspecialchars(str_replace(' ', '', $paraArr['has_media_lead']));
+	if ($has_media_lead == "1") { $has_media_lead_bool = true; } else { $has_media_lead_bool = false; }
 
 
 	$ip = $_SERVER['REMOTE_ADDR'];
@@ -192,15 +194,25 @@ function ech_lfg_fun($atts){
 	
 
 	
-	$output .= '
-	<div class="bookDoc_div">
-    <a href="https://booking.echealthcare.com/app-medical/doctor?searchKey=匯兒兒科醫務中心&brandId=317&mspTokenWeb='.$c_token.'&mspTokenApp='.$c_token.'&refSource=Landing_Page_Button" target="_blank">
-        <img src="https://www.primecare.com.hk/wp-content/uploads/2021/12/bookDoc_S.png" alt="即時預約">
-    </a>
-</div>
+	$output = '
+    <div class="lfg_formMsg lfg_desktop"></div>
+    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'"  data-has-media-lead="'.$has_media_lead.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
 
-    <div class="lfg_formMsg"></div>
-    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
+		<div class="form_row">
+			<div>
+				<label>請選擇預約或查詢: </label>
+				<br>
+				<label class="radio_label">
+				<input type="radio" name="lfg_form_type" id="booking_type" value="booking" checked="checked"/>
+				<label for="booking_type" class="form_type_lable">預約</label>
+				<input type="radio" name="lfg_form_type" id="enquiry_type" value="enquiry"/>
+				<label for="enquiry_type" class="form_type_lable">查詢</label>
+				</label>
+			</div>
+			
+		</div>
+
+
        <div class="form_row">
            <div>
                <input type="text" name="last_name" id="last_name"  class="form-control"  placeholder="*姓氏" pattern="[ A-Za-z\u3000\u3400-\u4DBF\u4E00-\u9FFF]{1,}"  size="40" required >
@@ -236,7 +248,7 @@ function ech_lfg_fun($atts){
 
 
 	   $output .= '
-       <div class="form_row">
+       <div class="form_row datetime_row">
            <div>
                <input type="text" placeholder="*預約日期" id="booking_date" class="form-control lfg_datepicker" name="booking_date" autocomplete="off" value="" size="40" required>
            </div>
@@ -248,7 +260,7 @@ function ech_lfg_fun($atts){
 
 		/***** Location Options */
        $output .= '
-	   <div class="form_row">
+	   <div class="form_row location_row">
            <div>';
 		if ($shop_count <= 3) {
 			// radio
@@ -324,18 +336,32 @@ function ech_lfg_fun($atts){
 		 /***** (END) Item Options */
 
 
+		 /****** Media Lead */
+		 if ($has_media_lead_bool) {
+			$output .='
+			 <div class="form_row">
+				 <div>
+				 	<input type="text" name="media_lead" id="media_lead"  class="form-control"  placeholder="社交媒體 (e.g. IG: xxx, FB: xxx etc.)">
+				 </div>
+			 </div>
+			 <!-- form_row -->
+			 ';
+		}
+		 /****** (END)Media Lead */
+
+
 
 
 		 /***** Textarea */
 		 if ($has_textarea_bool) {
 			 $output .='
-			 <div class="form_row">
-				 <div>
-					 <textarea class="form-control" type="textarea" name="remarks" id="remarks" placeholder="'.$textarea_label.'" maxlength="140" rows="7"></textarea>
-				 </div>
-			 </div>
-			 <!-- form_row -->
-			 ';
+			<div class="form_row">
+				<div>
+					<textarea class="form-control" type="textarea" name="remarks" id="remarks" placeholder="'.$textarea_label.'" maxlength="140" rows="3"></textarea>
+				</div>
+			</div> 
+			<!-- form_row -->
+			';
 		 }
 		 /***** (END) Textarea */
        $output .= ' 
@@ -348,7 +374,11 @@ function ech_lfg_fun($atts){
                <small> *必需填寫</small>
            </div>
        </div><!-- form_row -->
-   
+		 
+	   <div class="form_row">
+	   		<div class="lfg_formMsg lfg_mobile"></div>
+		</div> <!-- form_row -->
+
        <div class="form_row">
            <button type="submit" value="提交" id= "submitBtn" >提交</button>
        </div><!-- form_row -->

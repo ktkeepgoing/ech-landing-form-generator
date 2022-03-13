@@ -1,5 +1,24 @@
 jQuery(document).ready(function(){
 
+    /*********** Select form type ***********/
+    jQuery('input[type=radio][name=lfg_form_type]').on('change', function() {
+        if (this.value == 'booking') {
+            jQuery(".datetime_row").css("display", "flex");
+            jQuery(".location_row").css("display", "flex");
+            jQuery('#booking_date').prop('required',true);
+            jQuery('#booking_time').prop('required',true);
+        }
+        else if (this.value == 'enquiry') {
+            jQuery(".datetime_row").css("display", "none");
+            jQuery(".location_row").css("display", "none");
+            jQuery('#booking_date').prop('required',false);
+            jQuery('#booking_time').prop('required',false);
+        }
+    });
+    /*********** (END) Select form type ***********/
+
+
+
 
     /*********** Checkbox limitation ***********/
     var limit = jQuery('.ech_lfg_form').data("limited-no");
@@ -11,7 +30,7 @@ jQuery(document).ready(function(){
     /*********** (END) Checkbox limitation ***********/
 
     /*********** Datepicker & Timepicker ***********/
-    jQuery('.lfg_timepicker').timepicker({'minTime': '11:00am','maxTime': '7:30pm'});
+    jQuery('.lfg_timepicker').timepicker({'minTime': '9:30am','maxTime': '6:30pm'});
     jQuery( ".lfg_datepicker" ).datepicker({ beforeShowDay: nosunday, dateFormat: 'yy-mm-dd', minDate: 3});
     jQuery('#ui-datepicker-div').addClass('skiptranslate notranslate');
     /*********** (END) Datepicker & Timepicker ***********/
@@ -68,6 +87,7 @@ jQuery(document).ready(function(){
         var shop_count = jQuery(this).data("shop-count");
         var brand = jQuery(this).data("brand");
         var has_textarea = jQuery(this).data("has-textarea");
+        var has_media_lead = jQuery(this).data("has-media-lead");
 
         var items = [];
 		jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
@@ -85,22 +105,44 @@ jQuery(document).ready(function(){
 			_tel = jQuery("#ech_lfg_form #tel").val(),
 			_email = jQuery("#ech_lfg_form #email").val(),
 			_age_group = jQuery("#ech_lfg_form #age").val(),
-			_booking_date = jQuery("#ech_lfg_form .lfg_datepicker").val(),
-			_booking_time = jQuery("#ech_lfg_form .lfg_timepicker").val();
+            _remarks = "";
 
-        if (shop_count <=3){
-            var _shop_area_code = jQuery('input[name=shop]:checked', '#ech_lfg_form').val();
-        } else {
-            var _shop_area_code = jQuery('#shop').val();
+        
+        var _booking_date = "";
+        var _booking_time = "";
+        var _shop_area_code = "";
+
+        /******* Form Type Selection *******/
+        var form_type = jQuery('input[name=lfg_form_type]:checked', '#ech_lfg_form').val();
+        if (form_type == "booking") {            
+            _remarks += " | 提交類型: " + form_type;
+            _booking_date = jQuery("#ech_lfg_form .lfg_datepicker").val(),
+            _booking_time = jQuery("#ech_lfg_form .lfg_timepicker").val();
+
+            if (shop_count <=3){
+                _shop_area_code = jQuery('input[name=shop]:checked', '#ech_lfg_form').val();
+            } else {
+                _shop_area_code = jQuery('#shop').val();
+            }
+        } else if (form_type == "enquiry") {
+            _remarks += " | 提交類型: " + form_type;
+            _booking_date = "";
+            _booking_time = "";
+            _shop_area_code = "KLN15";
         }
+        /******* (END)Form Type Selection *******/
+        
+        if(has_media_lead == 1) {
+            _remarks += " | 社交媒體: " + jQuery("#media_lead").val();
+        }
+
 
         if(has_textarea == 1) {
-            var _remarks = jQuery("#remarks").val();
-        } else {
-            var _remarks = "";
+            _remarks += " | 其他諮詢: " + jQuery("#remarks").val();
         }
 
 
+        /****************** FORM VALIDATION ******************/
             if(( _tel_prefix == "+852" && _tel.length != 8 ) || ( _tel_prefix == "+853" && _tel.length != 8 ) ) {
                 jQuery(".lfg_formMsg").html("+852, +853電話必需8位數字(沒有空格)");
                 return false;
