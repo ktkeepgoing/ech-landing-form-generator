@@ -37,5 +37,5 @@ Attributes values must be corresponding to each other:
 ## Screenshots
 ![](https://github.com/ktkeepgoing/ech-landing-form-generator/blob/cc0582ab4442adb9b2e9c0a69f19fdee1421e6a7/screenshot/form.jpg)
 
-If the shop selection field is more than 3 options or the item selection field is more than 7 options, the field will appear as a dropdown selection, like the screenshot below
+If the shop selection field is more than 3 options or the item selection field is more than 7 options, the field is displayed as a dropdown selection, like the screenshot below
 ![](https://github.com/ktkeepgoing/ech-landing-form-generator/blob/cc0582ab4442adb9b2e9c0a69f19fdee1421e6a7/screenshot/more-options.jpg)
