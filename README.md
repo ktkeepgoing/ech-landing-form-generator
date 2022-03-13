@@ -31,7 +31,7 @@ Attributes values must be corresponding to each other:
 3. shop and shop_code
 
 
-[^1]: required
+[^1]: attribute is required
 [^2]: Multiple Strings: can has multiple values, use comma to separate them
 
 ## Screenshots
