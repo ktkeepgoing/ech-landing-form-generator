@@ -1,5 +1,5 @@
 # ech-landing-form-generator
-A Wordpress plugin to generate a lead form for ECH company. It is integrated with ECH marketing system (MSP). Form data will be passed and stored in the MSP for future use.   
+A Wordpress plugin to generate a responsive lead form for ECH company. It is integrated with ECH marketing system (MSP). Form data will be passed and stored in the MSP for future use.   
 
 To generate a lead form, type shortcode
 ```
