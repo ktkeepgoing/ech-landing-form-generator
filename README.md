@@ -3,8 +3,10 @@ A Wordpress plugin to generate a responsive lead form for ECH company's brand we
 
 To generate a lead form, enter shortcode
 ```
-[ech_lfg default_r_code="r_code" item="Item 1" item_code="CODE123" shop="Causeway Bay Store" shop_code="HK001"]
+[ech_lfg default_r_code="r_code" item="Item 1" item_code="CODE123" shop="Causeway Bay Store" shop_code="HK001" brand="BRAND_NAME" tks_para="URL_PARAMETER"]
 ```
+## Before installation 
+Change the "Thank you" page URL in "js/ech-ifg.js" for redirection after the form is successfully submitted. 
 
 ## Shortcode attributes
 - **default_r** (String): default tcode, default is t200
@@ -18,11 +20,11 @@ To generate a lead form, enter shortcode
 - **is_item_limited** (INT): are the items limited. 0 = false, 1 = true, default is 0
 - **item_limited_num** (INT): No. of options can the user choose, default is 1
 - **shop** (Multiple Strings)(*): shop
-- **shop_code** (Multiple Strings)(*): shop MSP token
+- **shop_code** (Multiple Strings)(*): shop MSP token 
 - **shop_label** (String): shop label. default is "*請選擇診所"
 - **has_textarea** (INT): has textarea field. 0 = false, 1 = true. default is 0.
 - **textarea_label** (String): textarea placeholder. default is "其他專業諮詢"
-- **brand** (String)- for MSP, website name value
+- **brand** (String)(*)- for MSP, website name value
 - **tks_para**(String): url parameter needs to pass to thank you page
 
 Attributes values must be corresponding to each other:

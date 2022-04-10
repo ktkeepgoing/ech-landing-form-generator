@@ -192,13 +192,7 @@ function ech_lfg_fun($atts){
 	
 
 	
-	$output .= '
-	<div class="bookDoc_div">
-    <a href="https://booking.echealthcare.com/app-medical/doctor?searchKey=匯兒兒科醫務中心&brandId=317&mspTokenWeb='.$c_token.'&mspTokenApp='.$c_token.'&refSource=Landing_Page_Button" target="_blank">
-        <img src="https://www.primecare.com.hk/wp-content/uploads/2021/12/bookDoc_S.png" alt="即時預約">
-    </a>
-</div>
-
+	$output = '
     <div class="lfg_formMsg"></div>
     <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
        <div class="form_row">
@@ -241,7 +235,7 @@ function ech_lfg_fun($atts){
                <input type="text" placeholder="*預約日期" id="booking_date" class="form-control lfg_datepicker" name="booking_date" autocomplete="off" value="" size="40" required>
            </div>
            <div>
-                <input type="text" placeholder="*預約時間" id="booking_time" class="form-control lfg_timepicker" name="booking_date" autocomplete="off" value="" size="40" required>
+                <input type="text" placeholder="*預約時間" id="booking_time" class="form-control lfg_timepicker" name="booking_time" autocomplete="off" value="" size="40" required>
            </div>
        </div><!-- form_row -->';
 
