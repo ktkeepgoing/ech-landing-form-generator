@@ -3,7 +3,7 @@ A Wordpress plugin to generate a responsive lead form for ECH company's brand we
 
 To generate a lead form, enter shortcode
 ```
-[ech_lfg default_r_code="r_code" item="Item 1" item_code="CODE123" shop="Causeway Bay Store" shop_code="HK001"]
+[ech_lfg default_r_code="t200" r="t575, t575google | t127, T127fb" r_code="TCODETOKEN575, TCODETOKEN127" item="Item 1" item_code="ITEMCODE123" shop="Causeway Bay, Kowloon" shop_code="HK001, KW001"]
 ```
 
 ## Shortcode attributes
