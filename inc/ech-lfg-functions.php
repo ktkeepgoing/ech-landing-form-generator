@@ -51,6 +51,9 @@ function ech_lfg_fun($atts){
 		'item_label' => '*查詢項目',		 // item label
 		'is_item_limited' => '0',			// are the items limited. 0 = false, 1 = true
 		'item_limited_num' => '1',			// No. of options can the user choose
+		'has_select_dr' => '0',				// has Select Doctor field. 0 = false, 1 = true
+		'dr' => null,						// Doctor value
+		'dr_code' => null,					// Doctor code
 		'shop' => null,						// shop
 		'shop_code' => null,				// shop MSP token
 		'shop_label' => '*請選擇診所',		 // shop label
@@ -58,8 +61,8 @@ function ech_lfg_fun($atts){
 		'textarea_label' => '其他專業諮詢',	 // textarea label
 		'brand' => null,					// for MSP, website name value
 		'tks_para' => null					// parameters need to pass to thank you page
-
 	), $atts );
+
 
 	if ($paraArr['default_r_code'] == null) {
 		return "<h4>Error - default_r_code not specified</h4>";
@@ -70,6 +73,8 @@ function ech_lfg_fun($atts){
 	if (($paraArr['r_code'] != null)&&$paraArr['r'] == null) {
 		return "<h4>Error - r not specified</h4>";
 	}
+
+	
 
 	if ($paraArr['item'] == null) {
 		return "<h4>Error - item not specified</h4>";
@@ -88,21 +93,43 @@ function ech_lfg_fun($atts){
 	}
 
 	// Parse type into an array. Whitespace will be stripped.
-	$paraArr['r'] = array_map( 'trim', str_getcsv( $paraArr['r'], ',' ) );
+	$paraArr['r'] = array_map( 'trim', str_getcsv($paraArr['r'], '|') );
+	$paraArr['r'] = array_filter($paraArr['r']); // remove empty value
+	// Child values. Parse type into an array
+	foreach($paraArr['r'] as $key => $val) {
+		$paraArr['r'][$key] = array_map( 'trim', str_getcsv($paraArr['r'][$key], ',') );
+	}
+
+
 	$paraArr['r_code'] = array_map( 'trim', str_getcsv( $paraArr['r_code'], ',' ) );
+
+
 	$paraArr['item'] = array_map( 'trim', str_getcsv( $paraArr['item'], ',' ) );
 	$paraArr['item_code'] = array_map( 'trim', str_getcsv( $paraArr['item_code'], ',' ) );
+
 	$paraArr['shop'] = array_map( 'trim', str_getcsv( $paraArr['shop'], ',' ) );
 	$paraArr['shop_code'] = array_map( 'trim', str_getcsv( $paraArr['shop_code'], ',' ) );
 
+	$has_dr = htmlspecialchars(str_replace(' ', '', $paraArr['has_select_dr']));
+	if ($has_dr == "1") { $has_dr_bool = true; } else { $has_dr_bool = false; }
+	$paraArr['dr'] = array_map( 'trim', str_getcsv( $paraArr['dr'], ',' ) );
+	$paraArr['dr_code'] = array_map( 'trim', str_getcsv( $paraArr['dr_code'], ',' ) );
 
-	
+
+
+	if(count($paraArr['r_code']) != count($paraArr['r'])) {
+		return "<h4>Error - r_code and r count array value is not the same. They must be corresponding to each other.</h4>";
+	}
 	if (count($paraArr['item']) != count($paraArr['item_code'])) {
 		return "<h4>Error - item and item_code must be corresponding to each other</h4>";
 	}
 	if (count($paraArr['shop']) != count($paraArr['shop_code'])) {
 		return "<h4>Error - shop and shop_code must be corresponding to each other</h4>";
 	}
+	if (count($paraArr['dr']) != count($paraArr['dr_code'])) {
+		return "<h4>Error - dr and dr_code must be corresponding to each other</h4>";
+	}
+
 	
 
 	$default_r = htmlspecialchars(str_replace(' ', '', $paraArr['default_r']));
@@ -138,37 +165,46 @@ function ech_lfg_fun($atts){
 	if(isset($_GET['r'])) {
 		$get_r = $_GET['r'];
 	} else {
-		$get_r = "";
+		$get_r = $default_r;
 	}
 
 
-	if(!empty($paraArr['r'][0])) {
-		//$output .= "not empty <br>";
-		if(in_array($get_r, $paraArr['r'])) {
-			//get_r exist in array
-			$key = array_search($get_r, $paraArr['r']);
-			$r = $paraArr['r'][$key];
-			$c_token = $paraArr['r_code'][$key];
-			
-		} else {
+	if(!empty($paraArr['r'])) {
+		$sourceArr =  $paraArr['r'];
+		foreach($sourceArr as $key => $rValArr) {
+			// Search if $get_r value exist in child array
+			if(in_array($get_r, $rValArr)) { 
+				$r = $get_r;
+
+				$parentArr_key = $key;
+				$c_token = $paraArr['r_code'][$parentArr_key];
+				break;
+			} 
+
 			$r = $default_r;
 			$c_token = $default_r_code;
 		}
+
 	} else {
-		//$output .= "empty <br>";
 		$r = $default_r;
 		$c_token = $default_r_code;
 	}
-	
 
 	$shop_count = count($paraArr['shop']);
 
 
 	/***** FOR TESTING OUTPUT *****/
 	/*
-	$output .= '<div>';
-	$output .= 'GET_r: ' . $_GET['r'] . '<br>';
+	$output = '';
+	$output .= '<div><pre>';
+	$output .= 'GET[r]: ' . $_GET['r'] . '<br>';
+	$output .= '$r: ' . $r . '<br>';
+	$output .= '$c_token: ' . $c_token . '<br>';
+	$output .= '$parentArr_key: ' . $parentArr_key . '<br>';
+
+	$output .= '---------------------------<br>';
 	$output .= 'r: ' . print_r( $paraArr['r'], true  ) . '<br>';
+	
 	$output .= 'r_code: ' . print_r( $paraArr['r_code'], true  ) . '<br>';
 	$output .= 'default_r: ' . $default_r . '<br>';
 	$output .= 'default_r_code: ' . $default_r_code . '<br>';
@@ -184,7 +220,7 @@ function ech_lfg_fun($atts){
 	$output .= 'tks_para: ' . $tks_para . '<br>';
 	$output .= '<br><br>';
 	$output .= 'current r: ' . $r . ' | current token: '.$c_token;
-	$output .= '</div>';
+	$output .= '</pre></div>';
 	*/
 	/***** (END) FOR TESTING OUTPUT *****/
 
@@ -194,7 +230,10 @@ function ech_lfg_fun($atts){
 	
 	$output = '
     <div class="lfg_formMsg"></div>
-    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
+    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-has-select-dr="'.$has_dr.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
+		<div class="form_row">
+			<input type="hidden" name="booking_time" value="">
+		</div>
        <div class="form_row">
            <div>
                <input type="text" name="last_name" id="last_name"  class="form-control"  placeholder="*姓氏" pattern="[ A-Za-z\u3000\u3400-\u4DBF\u4E00-\u9FFF]{1,}"  size="40" required >
@@ -215,7 +254,7 @@ function ech_lfg_fun($atts){
            </div>
 		';
 
-			/***** Email */
+			//**** Email
 			$output .='<div>';
 			if ($email_required_bool) {
 				$output .= '<input type="email" name="email" id="email" placeholder="*電郵" class="form-control" size="40" required>';
@@ -223,24 +262,40 @@ function ech_lfg_fun($atts){
 				$output .= '<input type="email" name="email" id="email" placeholder="電郵" class="form-control" size="40" >';
 			}
 			$output .= '</div>';
-			/***** (END) Email */
+			//**** (END) Email
         
         $output .= '</div> <!-- form_row -->';
 		
 
 
-	   $output .= '
-       <div class="form_row">
+	   $output .= '<div class="form_row">';
+		
+			//******* Choose doctor if any
+			if($has_dr_bool) {
+				$output .='<div>';
+					$output .= '<select  class="form-control" name="select_dr" id="select_dr" style="width: 100%;" required >';
+					$output .= '<option disabled="" selected="" value="">*請選擇醫生</option>';
+					for($i=0 ; $i < count($paraArr['dr']); $i++) {
+						$output .= '<option value="'.$paraArr['dr_code'][$i].'">'.$paraArr['dr'][$i].'</option>';
+					}
+					$output .= '</select>';					               
+				$output .='</div>';
+			}			
+			//******* (END) Choose doctor if any
+
+	   $output .='
            <div>
                <input type="text" placeholder="*預約日期" id="booking_date" class="form-control lfg_datepicker" name="booking_date" autocomplete="off" value="" size="40" required>
            </div>
-           <div>
-                <input type="text" placeholder="*預約時間" id="booking_time" class="form-control lfg_timepicker" name="booking_time" autocomplete="off" value="" size="40" required>
-           </div>
-       </div><!-- form_row -->';
+		   <div>
+		   		<input type="text" placeholder="*預約時間" id="booking_time" class="form-control lfg_timepicker ui-timepicker-input" name="booking_time" autocomplete="off" value="" size="40" required="">
+		   </div>';
+		
+		   $output .='</div><!-- form_row -->';
 
 
-		/***** Location Options */
+
+		//**** Location Options
        $output .= '
 	   <div class="form_row">
            <div>';
@@ -267,11 +322,13 @@ function ech_lfg_fun($atts){
 		$output .='
            </div>
         </div> <!-- form_row -->';
-		/***** (END) Location Options */
+		//**** (END) Location Options
+		
 
 
 
-		/***** Item Options */
+
+		//**** Item Options
 		$output .= '
 		<div class="form_row">
 			<div>';
@@ -315,12 +372,12 @@ function ech_lfg_fun($atts){
 		 $output .='
 			</div>
 		 </div> <!-- form_row -->';
-		 /***** (END) Item Options */
+		 //**** (END) Item Options
 
 
 
 
-		 /***** Textarea */
+		 //**** TEXTAREA 
 		 if ($has_textarea_bool) {
 			 $output .='
 			 <div class="form_row">
@@ -331,28 +388,28 @@ function ech_lfg_fun($atts){
 			 <!-- form_row -->
 			 ';
 		 }
-		 /***** (END) Textarea */
-       $output .= ' 
-       
-   
-       <div class="form_row">
-           <div>
-               <p class="redWord">本中心將與您聯絡確認詳情，方為確實是次預約。</p>
-               <label><input type="checkbox" class="agree"  value="agreed_policy" name="info_remark[]" checked required > * 本人已閱讀並同意有關 <a href="https://echealthcare.com/zh/privacy-policy"   target="_blank">私隱政策聲明</a>。</label>
-               <small> *必需填寫</small>
-           </div>
-       </div><!-- form_row -->
-   
-       <div class="form_row">
-           <button type="submit" value="提交" id= "submitBtn" >提交</button>
-       </div><!-- form_row -->
-   </form>
-   '; 
+		 //**** (END) TEXTAREA 
 
-   
+
+       $output .= ' 
+			<div class="form_row">
+				<div>
+					<p class="redWord">本中心將與您聯絡確認詳情，方為確實是次預約。</p>
+					<label><input type="checkbox" class="agree"  value="agreed_policy" name="info_remark[]" checked required > * 本人已閱讀並同意有關 <a href="https://echealthcare.com/zh/privacy-policy"   target="_blank">私隱政策聲明</a>。</label>
+					<small> *必需填寫</small>
+				</div>
+			</div><!-- form_row -->
+		
+			<div class="form_row">
+				<button type="submit" value="提交" id= "submitBtn" >提交</button>
+			</div><!-- form_row -->
+		</form>
+   		'; 
+
    
 	return $output;
 }
+
 
 
 add_action('wp_ajax_LFG_formToMSP', 'LFG_formToMSP');

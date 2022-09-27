@@ -68,11 +68,17 @@ jQuery(document).ready(function(){
         var shop_count = jQuery(this).data("shop-count");
         var brand = jQuery(this).data("brand");
         var has_textarea = jQuery(this).data("has-textarea");
+        var has_select_dr = jQuery(this).data("has-select-dr");
 
         var items = [];
 		jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
 			items.push(jQuery(this).val());
 		});
+
+        if(has_select_dr == 1) {
+            var _selectDr = jQuery("#ech_lfg_form #select_dr").val();
+            items.push(_selectDr);
+        }
 
 
 		var _name = jQuery("#ech_lfg_form #last_name").val() + " " + jQuery("#ech_lfg_form #first_name").val(),
@@ -142,9 +148,9 @@ jQuery(document).ready(function(){
                         if (jsonObj.result == 0) {
                             var origin   = window.location.origin;
                             if (tks_para != null) {
-                                window.location.replace(origin+'/primecare/thanks?prod='+tks_para);
+                                window.location.replace(origin+'/sc/thanks?prod='+tks_para);
                             } else {
-                                window.location.replace(origin+'/primecare/thanks');
+                                window.location.replace(origin+'/sc/thanks');
                             }                         
                         } else {
                             alert("無法提交閣下資料, 請重試");

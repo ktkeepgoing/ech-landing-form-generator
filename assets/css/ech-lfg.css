@@ -8,7 +8,7 @@
 }
 
 .lfg_formMsg {
-    color: #8f6c95;
+    color: #0170B9;
     text-align: center;
     font-weight: 600;
     font-size: 20px;
@@ -60,13 +60,13 @@ small {
 }
 
 #submitBtn {
-    background: #8f6c95;
+    background: #0170B9;
     color: #fff;
     font-family: 'YuanTi', sans-serif;
     width: 100%;
     font-size: 17px;
 }
-#submitBtn:hover { background: #42a7c6; }
+#submitBtn:hover { background: #629ac7; }
 
 .ui-datepicker td span, .ui-datepicker td a {
     font-size: inherit;
