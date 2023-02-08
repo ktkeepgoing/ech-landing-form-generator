@@ -7,7 +7,7 @@
  * 
  * 
  * @link       https://primecare.com.hk/
- * @since      1.0.0 *
+ * @since      2.0.0 *
  * @package    ECH_Landing_Form_Generator
  * 
  */
@@ -59,6 +59,8 @@ function ech_lfg_fun($atts){
 		'shop_label' => '*請選擇診所',		 // shop label
 		'has_textarea' => '0',				// has textarea field. 0 = false, 1 = true
 		'textarea_label' => '其他專業諮詢',	 // textarea label
+		'has_hdyhau' => '0',				// has "How did you hear about us" field. 0 = false, 1 = true
+		'hdyhau_item' => null,				// "How did you hear about us" items
 		'brand' => null,					// for MSP, website name value
 		'tks_para' => null					// parameters need to pass to thank you page
 	), $atts );
@@ -130,6 +132,11 @@ function ech_lfg_fun($atts){
 		return "<h4>Error - dr and dr_code must be corresponding to each other</h4>";
 	}
 
+	$has_hdyhau = htmlspecialchars(str_replace(' ', '', $paraArr['has_hdyhau']));
+	 if($has_hdyhau == "1" && empty($paraArr['hdyhau_item']) ) {
+		return "<h4>at least one or more hdyhau_items</h4>";
+	}
+
 	
 
 	$default_r = htmlspecialchars(str_replace(' ', '', $paraArr['default_r']));
@@ -152,6 +159,9 @@ function ech_lfg_fun($atts){
 	if ($has_textarea == "1") { $has_textarea_bool = true; } else { $has_textarea_bool = false; }
 	$textarea_label = htmlspecialchars(str_replace(' ', '', $paraArr['textarea_label']));
 
+	if ($has_hdyhau == "1") { $has_hdyhau_bool = true; } else { $has_hdyhau_bool = false; }
+	$paraArr['hdyhau_item'] = array_map( 'trim', str_getcsv( $paraArr['hdyhau_item'], ',' ) );
+	
 
 
 
@@ -200,7 +210,7 @@ function ech_lfg_fun($atts){
 	$output .= 'GET[r]: ' . $_GET['r'] . '<br>';
 	$output .= '$r: ' . $r . '<br>';
 	$output .= '$c_token: ' . $c_token . '<br>';
-	$output .= '$parentArr_key: ' . $parentArr_key . '<br>';
+	//$output .= '$parentArr_key: ' . $parentArr_key . '<br>';
 
 	$output .= '---------------------------<br>';
 	$output .= 'r: ' . print_r( $paraArr['r'], true  ) . '<br>';
@@ -220,6 +230,8 @@ function ech_lfg_fun($atts){
 	$output .= 'tks_para: ' . $tks_para . '<br>';
 	$output .= '<br><br>';
 	$output .= 'current r: ' . $r . ' | current token: '.$c_token;
+	$output .= '<br><br>';
+	$output .= 'has_hdyhau: ' . $has_hdyhau . ' | hdyhau_item: '.print_r( $paraArr['hdyhau_item'], true  );
 	$output .= '</pre></div>';
 	*/
 	/***** (END) FOR TESTING OUTPUT *****/
@@ -230,7 +242,7 @@ function ech_lfg_fun($atts){
 	
 	$output = '
     <div class="lfg_formMsg"></div>
-    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-has-select-dr="'.$has_dr.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'">
+    <form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="'.$item_limited_num.'" data-r="'.$r.'" data-c-token="'.$c_token.'" data-shop-count="'.$shop_count.'" data-ajaxurl="'.get_admin_url(null, 'admin-ajax.php').'" data-ip="'.$ip.'" data-url="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" data-has-textarea="'.$has_textarea.'" data-has-select-dr="'.$has_dr.'" data-item-label="'.$item_label.'" data-tks-para="'.$tks_para.'" data-brand="'.$brand.'" data-has-hdyhau="'.$has_hdyhau.'">
 		<div class="form_row">
 			<input type="hidden" name="booking_time" value="">
 		</div>
@@ -389,6 +401,22 @@ function ech_lfg_fun($atts){
 			 ';
 		 }
 		 //**** (END) TEXTAREA 
+
+
+
+		//**** HOW DID YOU HEAR ABOUT US
+		 if($has_hdyhau_bool) {
+			$output .= '<div class="form_row"><div>';
+				$output .= '<select  class="form-control" name="select_hdyhau" id="select_hdyhau" style="width: 100%;" >';
+					$output .= '<option disabled="" selected="" value="">從以下那一種途徑得知我們?</option>';
+					for($i=0 ; $i < count($paraArr['hdyhau_item']); $i++) {
+						$output .= '<option value="'.$paraArr['hdyhau_item'][$i].'">'.$paraArr['hdyhau_item'][$i].'</option>';
+					}
+				$output .= '</select>';	
+			$output .= '</div></div>';
+		 }
+		//**** (END) HOW DID YOU HEAR ABOUT US
+
 
 
        $output .= ' 

@@ -69,6 +69,7 @@ jQuery(document).ready(function(){
         var brand = jQuery(this).data("brand");
         var has_textarea = jQuery(this).data("has-textarea");
         var has_select_dr = jQuery(this).data("has-select-dr");
+        var has_hdyhau = jQuery(this).data("has-hdyhau");
 
         var items = [];
 		jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
@@ -92,18 +93,22 @@ jQuery(document).ready(function(){
 			_email = jQuery("#ech_lfg_form #email").val(),
 			_age_group = jQuery("#ech_lfg_form #age").val(),
 			_booking_date = jQuery("#ech_lfg_form .lfg_datepicker").val(),
-			_booking_time = jQuery("#ech_lfg_form .lfg_timepicker").val();
+			_booking_time = jQuery("#ech_lfg_form .lfg_timepicker").val(),
+            _remarks = "";
 
         if (shop_count <=3){
             var _shop_area_code = jQuery('input[name=shop]:checked', '#ech_lfg_form').val();
         } else {
-            var _shop_area_code = jQuery('#shop').val();
+            var _shop_area_code = jQuery('#ech_lfg_form #shop').val();
         }
 
+        
         if(has_textarea == 1) {
-            var _remarks = jQuery("#remarks").val();
-        } else {
-            var _remarks = "";
+            _remarks += jQuery("#ech_lfg_form #remarks").val();
+        }
+
+        if(has_hdyhau == 1) {
+            _remarks += "| 途徑得知: " + jQuery("#ech_lfg_form #select_hdyhau").val();
         }
 
 
