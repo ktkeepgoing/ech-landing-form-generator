@@ -59,12 +59,13 @@ small {
     color: #727171;
 }
 
-#submitBtn {
+.ech_lfg_form #submitBtn {
     background: #0170B9;
     color: #fff;
     font-family: 'YuanTi', sans-serif;
     width: 100%;
     font-size: 17px;
+    padding: 10px 0px;
 }
 #submitBtn:hover { background: #629ac7; }
 
