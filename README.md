@@ -22,6 +22,8 @@ To generate a lead form, enter shortcode
 - **shop_label** (String): shop label. default is "*請選擇診所"
 - **has_textarea** (INT): has textarea field. 0 = false, 1 = true. default is 0.
 - **textarea_label** (String): textarea placeholder. default is "其他專業諮詢"
+- **has_hdyhau** (INT): has "How did you hear about us" field. 0 = false, 1 = true. Default is 0. 
+- **hdyhau_item** (Multiple Strings)(*): "How did you hear about us" items. eg. `"Facebook, Google"`
 - **brand** (String)- for MSP, website name value
 - **tks_para**(String): url parameter needs to pass to thank you page
 
