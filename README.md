@@ -40,3 +40,7 @@ Below attributes values must be corresponding to each other:
 [^1]: attribute is required
 [^2]: Multiple Strings: can has multiple values, use comma to separate them
 
+
+### Remarks
+- If the shop selection field is more than 3 options or the item selection field is more than 7 options, those fields will be displayed as a dropdown selection.
+
