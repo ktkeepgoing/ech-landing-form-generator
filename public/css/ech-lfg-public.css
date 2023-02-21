@@ -1,4 +1,15 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
 
+ .code_error {
+    color: red;
+ }
+
+
+
+ 
 /***************** MAIN FORM *****************/
 
 .ech_lfg_form ::placeholder, select, select option, select option:checked {
@@ -59,12 +70,13 @@ small {
     color: #727171;
 }
 
-#submitBtn {
+.ech_lfg_form #submitBtn {
     background: #0170B9;
     color: #fff;
     font-family: 'YuanTi', sans-serif;
     width: 100%;
     font-size: 17px;
+    padding: 10px 0px;
 }
 #submitBtn:hover { background: #629ac7; }
 
