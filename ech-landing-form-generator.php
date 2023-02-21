@@ -19,7 +19,7 @@
  * Text Domain:       ech-post-list-cards
  * Domain Path:       /languages
  */
-
+ 
 
 if (! defined('ABSPATH')) {
 	exit;
