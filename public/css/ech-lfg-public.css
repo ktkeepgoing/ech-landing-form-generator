@@ -1,4 +1,15 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
 
+ .code_error {
+    color: red;
+ }
+
+
+
+ 
 /***************** MAIN FORM *****************/
 
 .ech_lfg_form ::placeholder, select, select option, select option:checked {
