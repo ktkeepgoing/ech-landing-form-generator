@@ -13,25 +13,6 @@ Based on the form requirments and MSP campaigns, change the attributes or values
 
 - **default_r** (String): default tcode, default is t200
 - **default_r_code** (String)(*)[^1]: default tcode MSP token
-<<<<<<< HEAD
-- **r** (Multiple Strings)[^2]: tcode eg.`"t575, t127"`. If there are more than one tcodes using the same tcode token, use `|` to separate them. eg. `"t575,t575g|t127,t127fb"`
-- **r_code** (Multiple Strings): tcode token. eg. `"TCODE1234, TCOED5678"`
-- **email_required** (INT): 0 = false, 1 = true. default is 1.
-- **item** (Multiple Strings)(*): item checkbox
-- **item_code** (Multiple Strings)(*): item MSP token
-- **item_label** (String): item label. default is "*查詢項目"
-- **is_item_limited** (INT): are the items limited. 0 = false, 1 = true, default is 0
-- **item_limited_num** (INT): No. of options can the user choose, default is 1
-- **shop** (Multiple Strings)(*): shop
-- **shop_code** (Multiple Strings)(*): shop MSP token
-- **shop_label** (String): shop label. default is "*請選擇診所"
-- **has_textarea** (INT): has textarea field. 0 = false, 1 = true. default is 0.
-- **textarea_label** (String): textarea placeholder. default is "其他專業諮詢"
-- **has_hdyhau** (INT): has "How did you hear about us" field. 0 = false, 1 = true. Default is 0. 
-- **hdyhau_item** (Multiple Strings)(*): "How did you hear about us" items. eg. `"Facebook, Google"`
-- **brand** (String)- for MSP, website name value
-- **tks_para**(String): url parameter needs to pass to thank you page
-=======
 - **r** (Multiple Strings)[^2]: tcode eg.`"t575, t127"`. If there are more than one tcodes using the same tcode token, use `|` to separate them. Eg. `"t575,t575g|t127,t127fb"`
 - **r_code** (Multiple Strings): tcode token. Eg. `"TCODE1234, TCOED5678"`
 - **email_required** (INT): 0 = false, 1 = true. Default is 1.
@@ -49,7 +30,6 @@ Based on the form requirments and MSP campaigns, change the attributes or values
 - **hdyhau_item** (Multiple Strings)(*): "How did you hear about us" items. Eg. `"Facebook, Google"`
 - **brand** (String): This will override the global setting "brand name" value which is set in the dashboard. 
 - **tks_para**(String): url parameter needs to pass to thank you page, usually product/treatment name. It is used for traffic tracking. Eg. `https://xxx.com/thanks?prod=TKS_PARA_VALUE`
->>>>>>> 5d957214d7c989b03600af28522fefd129c0139d
 
 Below attributes values must be corresponding to each other, otherwise no form will be generated:
 1. r and r_code
@@ -63,4 +43,3 @@ Below attributes values must be corresponding to each other, otherwise no form w
 
 ### Remarks
 - If the shop selection field is more than 3 options or the item selection field is more than 7 options, those fields will be displayed as a dropdown selection.
-
