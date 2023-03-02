@@ -46,7 +46,7 @@
                 <input type="text" name="ech_lfg_recapt_site_key" id="ech_lfg_recapt_site_key" value="<?= get_option( 'ech_lfg_recapt_site_key' )?>" pattern="[A-Za-z0-9_]{1,}" >
             </div>
 
-            <div class="form_row">
+            <div class="form_row"> 
                 <label>reCAPTCHA Secret Key : </label>
                 <input type="text" name="ech_lfg_recapt_secret_key" id="ech_lfg_recapt_secret_key" value="<?= get_option( 'ech_lfg_recapt_secret_key' )?>" pattern="[A-Za-z0-9_]{1,}" >
             </div>
