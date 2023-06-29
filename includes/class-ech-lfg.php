@@ -121,6 +121,7 @@ class Ech_Lfg {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-ech-lfg-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-ech-lfg-wati-public.php';
 
 		$this->loader = new Ech_Lfg_Loader();
 
@@ -175,6 +176,7 @@ class Ech_Lfg {
 	private function define_public_hooks() {
 
 		$plugin_public = new Ech_Lfg_Public( $this->get_plugin_name(), $this->get_version() );
+		$lfg_wati_public = new Ech_Lfg_Wati_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -186,6 +188,14 @@ class Ech_Lfg {
 		// ^^^ register lfg_recaptVerify function
 		$this->loader->add_action( 'wp_ajax_lfg_recaptVerify', $plugin_public, 'lfg_recaptVerify' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lfg_recaptVerify', $plugin_public, 'lfg_recaptVerify' );
+
+
+		// ^^^ register Wati functions
+		$this->loader->add_action( 'wp_ajax_lfg_WatiSendMsg', $lfg_wati_public, 'lfg_WatiSendMsg' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lfg_WatiSendMsg', $lfg_wati_public, 'lfg_WatiSendMsg' );
+
+		$this->loader->add_action( 'wp_ajax_lfg_WatiAddContact', $lfg_wati_public, 'lfg_WatiAddContact' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lfg_WatiAddContact', $lfg_wati_public, 'lfg_WatiAddContact' );
 
 		// ^^^ Add shortcodes
 		$this->loader->add_shortcode( 'ech_lfg', $plugin_public, 'display_ech_lfg');

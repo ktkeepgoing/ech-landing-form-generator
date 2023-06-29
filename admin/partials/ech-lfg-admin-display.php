@@ -80,6 +80,20 @@
                 <input type="text" name="ech_lfg_submitBtn_text_hoverColor" value="<?= htmlspecialchars(get_option( 'ech_lfg_submitBtn_text_hoverColor' ))?>" id="" pattern="^(#)[A-Za-z0-9]{3,6}">
             </div>
 
+
+            <h2>Wati Settings</h2>
+            <div class="form_row">
+                <label>Wati Key: </label>
+                <input type="text" name="ech_lfg_wati_key" value="<?= htmlspecialchars(get_option( 'ech_lfg_wati_key' ))?>" id="" />
+            </div>
+
+            <div class="form_row">
+                <label>Wati API domain: </label>
+                <input type="text" name="ech_lfg_wati_api_domain" value="<?= htmlspecialchars(get_option( 'ech_lfg_wati_api_domain' ))?>" id="" />
+            </div>
+
+
+
             <div class="form_row">
                 <button type="submit"> Save </button>
             </div>

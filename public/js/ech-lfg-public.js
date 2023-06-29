@@ -14,7 +14,7 @@
 	
 		/*********** Datepicker & Timepicker ***********/
 		jQuery('.lfg_timepicker').timepicker({'minTime': '11:00am','maxTime': '7:30pm'});
-		jQuery( ".lfg_datepicker" ).datepicker({ beforeShowDay: nosunday, dateFormat: 'yy-mm-dd', minDate: 3});
+		jQuery( ".lfg_datepicker" ).datepicker({ beforeShowDay: nosunday, dateFormat: 'yy-mm-dd', minDate: 1});
 		jQuery('#ui-datepicker-div').addClass('skiptranslate notranslate');
 		/*********** (END) Datepicker & Timepicker ***********/
 	
@@ -72,6 +72,8 @@
 			var has_textarea = jQuery(this).data("has-textarea");
 			var has_select_dr = jQuery(this).data("has-select-dr");
 			var has_hdyhau = jQuery(this).data("has-hdyhau");
+			var has_wati_pay = jQuery(this).data("wati-pay");
+			
 	
 			var items = [];
 			jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
@@ -110,7 +112,11 @@
 			}
 	
 			if(has_hdyhau == 1) {
-				_remarks += "| 途徑得知: " + jQuery("#ech_lfg_form #select_hdyhau").val();
+				_remarks += " | 途徑得知: " + jQuery("#ech_lfg_form #select_hdyhau").val();
+			}
+
+			if(has_wati_pay == 1) {
+				_remarks += " | ePay Ref Code: " + jQuery("#ech_lfg_form").data("epay-refcode");
 			}
 	
 	
@@ -154,6 +160,8 @@
 					} else {
 						// if recapt is disabled, send to msp
 						lfg_dataSendToMSP(_token, _source, _name, _user_ip, _website_name, _website_url, items, _tel_prefix, _tel, _email, _age_group, _shop_area_code, _booking_date, _booking_time, _remarks, ajaxurl, tks_para);
+
+						
 					}
 
 				} // checked_item_count
@@ -185,21 +193,113 @@
 	
 		jQuery.post(ajaxurl, data, function(msg) {
 			var jsonObj = JSON.parse(msg);
-			//console.log(msg);
-			//console.log(jsonObj.result);
+			//console.log(jsonObj);
+			
 			if (jsonObj.result == 0) {
 				var origin   = window.location.origin;
+				
+				
+				console.log('msp成功');
+				// check if wati pay is enabled
+				var wati_pay = jQuery("#ech_lfg_form").data("wati-pay");				
+				if (wati_pay == 1) {
+					var _phone = _tel_prefix + _tel;
+					var _wati_msg = jQuery("#ech_lfg_form").data("wati-msg");
+					
+					
+					var itemsTEXT = [];
+					jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
+						itemsTEXT.push(jQuery(this).data('text-value'));
+					});
+					var wati_booking_item = itemsTEXT.join(", ");
+
+					var wati_booking_location = jQuery("#ech_lfg_form input[name='shop']:checked").data("shop-text-value");
+
+					// Wati Send
+					lfg_watiSendMsg(_wati_msg, _name, _phone, _email, _booking_date, _booking_time, wati_booking_item, wati_booking_location, _website_url);
+				} // if wati enabled 
+
+				// redirect to landing thank you page
 				if (tks_para != null) {
 					window.location.replace(origin+'/thanks?prod='+tks_para);
 				} else {
 					window.location.replace(origin+'/thanks');
-				}                         
+				} 
+				
+
 			} else {
 				alert("無法提交閣下資料, 請重試");
 				location.reload(true);
 			} 
+
 		});  // end post ajax
 	}
+
+
+	function lfg_watiSendMsg(_watiMsg, _name, _phone, _email, _booking_date, _booking_time, _booking_item, _booking_location, _website_url) {
+
+		var ajaxurl = jQuery("#ech_lfg_form").data("ajaxurl");
+		var _epayRefCode = jQuery("#ech_lfg_form").data("epay-refcode");
+		var watiData = {
+			'action': 'lfg_WatiSendMsg',
+			'wati_msg': _watiMsg,
+			'name': _name, 
+			'phone': _phone,
+			'email': _email,
+			'booking_date': _booking_date,
+			'booking_time': _booking_time,
+			'booking_item': _booking_item,
+			'booking_location': _booking_location,
+			'website_url': _website_url,
+			'epayRefCode': _epayRefCode
+		};
+
+		console.log(watiData);
+		
+		jQuery.post(ajaxurl, watiData, function(wati_msg) {
+			var watiObj = JSON.parse(wati_msg);
+			console.log(watiObj);
+			if (watiObj.result) {
+				console.log('wtsapp msg sent');
+			} else {
+				console.log('wati send error');
+			}
+			
+		}).fail(function(xhr, status, error) {
+			// error handling
+			console.log("post error - xhr: " + JSON.stringify(xhr) + " status: " + status + " error: " + error)
+		});
+	} // lfg_watiSendMsg
+
+
+
+	function lfg_watiAddContact(_name, _phone, _email, _website_url, _source) {
+		var ajaxurl = jQuery("#ech_lfg_form").data("ajaxurl");
+		var watiContactData = {
+			'action': 'lfg_WatiAddContact',
+			'name': _name, 
+			'phone': _phone,
+			'email': _email,
+			'website_url': _website_url,
+			'r': _source
+		};
+
+		console.log(watiContactData);
+		
+		jQuery.post(ajaxurl, watiContactData, function(wati_msg) {
+			var watiObj = JSON.parse(wati_msg);
+			console.log(watiObj);
+			if (watiObj.result) {
+				console.log('wati contact added');
+			} else {
+				console.log('wati contact add fail');
+			}
+			
+		}).fail(function(xhr, status, error) {
+			// error handling
+			console.log("post error - xhr: " + JSON.stringify(xhr) + " status: " + status + " error: " + error)
+		});
+	} // lfg_watiAddContact
 
 })( jQuery );
 

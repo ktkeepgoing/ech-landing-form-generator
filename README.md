@@ -1,4 +1,4 @@
-# ech-landing-form-generator
+# ech-landing-form-generator (With WATI auto send whatsapp msg)
 A Wordpress plugin to generate a responsive lead form for ECH company's brand websites. It is integrated with ECH marketing system (MSP). Form data will be passed and stored in the MSP for future use.   
 
 

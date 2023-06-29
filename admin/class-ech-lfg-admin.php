@@ -133,6 +133,8 @@ class Ech_Lfg_Admin {
 		register_setting( 'lfg_gen_settings', 'ech_lfg_submitBtn_hoverColor');
 		register_setting( 'lfg_gen_settings', 'ech_lfg_submitBtn_text_color');
 		register_setting( 'lfg_gen_settings', 'ech_lfg_submitBtn_text_hoverColor');
+		register_setting( 'lfg_gen_settings', 'ech_lfg_wati_key');
+		register_setting( 'lfg_gen_settings', 'ech_lfg_wati_api_domain');
 	}
 
 	public function reg_lfg_recaptcha_settings() {

@@ -62,19 +62,6 @@ class Ech_Lfg_Public
 	 */
 	public function enqueue_styles()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Ech_Lfg_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Ech_Lfg_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/ech-lfg-public.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '_jqueryUI', plugin_dir_url(__FILE__) . 'lib/jquery-ui-1.12.1/jquery-ui.min.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '_timepicker', plugin_dir_url(__FILE__) . 'lib/jquery-timepicker/jquery.timepicker.css', array(), $this->version, 'all');
@@ -87,20 +74,6 @@ class Ech_Lfg_Public
 	 */
 	public function enqueue_scripts()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Ech_Lfg_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Ech_Lfg_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 * 
-		 */
-
 		wp_enqueue_script($this->plugin_name . '_jqueryUI', plugin_dir_url(__FILE__) . 'lib/jquery-ui-1.12.1/jquery-ui.min.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '_timepicker', plugin_dir_url(__FILE__) . 'lib/jquery-timepicker/jquery.timepicker.min.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ech-lfg-public.js', array('jquery'), $this->version, false);
@@ -138,7 +111,11 @@ class Ech_Lfg_Public
 			'has_hdyhau' => '0',				// has "How did you hear about us" field. 0 = false, 1 = true
 			'hdyhau_item' => null,				// "How did you hear about us" items
 			'brand' => $getBrandName,			// for MSP, website name value
-			'tks_para' => null					// parameters need to pass to thank you page
+			'tks_para' => null,					// parameters need to pass to thank you page
+			// Wati data
+			'wati_pay' => 0,
+			'wati_msg' => null
+
 		), $atts);
 
 
@@ -218,6 +195,11 @@ class Ech_Lfg_Public
 		}
 
 
+		if ($paraArr['wati_pay'] == 1 && $paraArr['wati_msg'] == null) {
+			return '<div class="code_error">wati_pay error - wati_pay enabled, wati_msg cannot be empty</div>';
+		}
+
+
 
 		$default_r = htmlspecialchars(str_replace(' ', '', $paraArr['default_r']));
 		$default_r_code = htmlspecialchars(str_replace(' ', '', $paraArr['default_r_code']));
@@ -262,7 +244,17 @@ class Ech_Lfg_Public
 		}
 		$paraArr['hdyhau_item'] = array_map('trim', str_getcsv($paraArr['hdyhau_item'], ','));
 
+		// Wati 
+		$wati_pay = htmlspecialchars(str_replace(' ', '', $paraArr['wati_pay']));
+		$wati_msg = htmlspecialchars(str_replace(' ', '', $paraArr['wati_msg']));
+		if ( $wati_pay == 1 ) {
+			$get_watiKey = get_option( 'ech_lfg_wati_key' );
+			$get_watiAPI = get_option( 'ech_lfg_wati_api_domain' );
 
+			if ( empty($get_watiKey) || empty($get_watiAPI) ) {
+				return '<div class="code_error">Wati error - Wati Key or Wati API are empty. Please setup in dashboard. </div>';
+			}
+		}
 
 
 		$ip = $_SERVER['REMOTE_ADDR'];
@@ -303,6 +295,9 @@ class Ech_Lfg_Public
 
 		$shop_count = count($paraArr['shop']);
 		
+
+		$rand = $this->genRandomString();
+
 		$output = '';
 		/***** FOR TESTING OUTPUT *****/
 		/*
@@ -373,7 +368,7 @@ class Ech_Lfg_Public
 
 		$output .= '
 		<div class="lfg_formMsg"></div>
-		<form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="' . $item_limited_num . '" data-r="' . $r . '" data-c-token="' . $c_token . '" data-shop-count="' . $shop_count . '" data-ajaxurl="' . get_admin_url(null, 'admin-ajax.php') . '" data-ip="' . $ip . '" data-url="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '" data-has-textarea="' . $has_textarea . '" data-has-select-dr="' . $has_dr . '" data-item-label="' . $item_label . '" data-tks-para="' . $tks_para . '" data-brand="' . $brand . '" data-has-hdyhau="' . $has_hdyhau . '" data-apply-recapt="'.get_option('ech_lfg_apply_recapt').'" data-recapt-site-key="'. get_option('ech_lfg_recapt_site_key') .'" data-recapt-score="'.get_option('ech_lfg_recapt_score').'" >
+		<form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="' . $item_limited_num . '" data-r="' . $r . '" data-c-token="' . $c_token . '" data-shop-count="' . $shop_count . '" data-ajaxurl="' . get_admin_url(null, 'admin-ajax.php') . '" data-ip="' . $ip . '" data-url="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '" data-has-textarea="' . $has_textarea . '" data-has-select-dr="' . $has_dr . '" data-item-label="' . $item_label . '" data-tks-para="' . $tks_para . '" data-brand="' . $brand . '" data-has-hdyhau="' . $has_hdyhau . '" data-apply-recapt="'.get_option('ech_lfg_apply_recapt').'" data-recapt-site-key="'. get_option('ech_lfg_recapt_site_key') .'" data-recapt-score="'.get_option('ech_lfg_recapt_score').'" data-wati-pay="'. $wati_pay .'" data-wati-msg="'.$wati_msg.'" data-epay-refcode="LPE_'.trim($brand).$rand.time().'">
 			<div class="form_row">
 				<input type="hidden" name="booking_time" value="">
 			</div>
@@ -570,6 +565,7 @@ class Ech_Lfg_Public
 
 
 	public function lfg_formToMSP() {
+
 		$crData = array();
 		$crData['token'] = $_POST['token'];
 		$crData['source'] = $_POST['source'];
@@ -613,6 +609,22 @@ class Ech_Lfg_Public
 	}
 
 
+
+	/****************************************************
+	 * For generate epay ref code that pass to MSP and 
+	 * epay landing url 
+	 ****************************************************/
+	public function genRandomString($length = 5) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[random_int(0, $charactersLength - 1)];
+		}
+		return $randomString;
+	}
+
+
 	private function lfg_curl($i_url, $i_fields = null, $i_isPOST = 0) {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $i_url);
@@ -627,5 +639,10 @@ class Ech_Lfg_Public
 	
 		return $rs;
 	}
+
+
+
+	
+
 
 }
