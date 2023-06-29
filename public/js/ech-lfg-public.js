@@ -197,9 +197,7 @@
 			
 			if (jsonObj.result == 0) {
 				var origin   = window.location.origin;
-				
-				
-				console.log('msp成功');
+
 				// check if wati pay is enabled
 				var wati_pay = jQuery("#ech_lfg_form").data("wati-pay");				
 				if (wati_pay == 1) {
@@ -254,11 +252,11 @@
 			'epayRefCode': _epayRefCode
 		};
 
-		console.log(watiData);
+		//console.log(watiData);
 		
 		jQuery.post(ajaxurl, watiData, function(wati_msg) {
 			var watiObj = JSON.parse(wati_msg);
-			console.log(watiObj);
+			//console.log(watiObj);
 			if (watiObj.result) {
 				console.log('wtsapp msg sent');
 			} else {
@@ -284,11 +282,11 @@
 			'r': _source
 		};
 
-		console.log(watiContactData);
+		//console.log(watiContactData);
 		
 		jQuery.post(ajaxurl, watiContactData, function(wati_msg) {
 			var watiObj = JSON.parse(wati_msg);
-			console.log(watiObj);
+			//console.log(watiObj);
 			if (watiObj.result) {
 				console.log('wati contact added');
 			} else {
