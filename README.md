@@ -1,4 +1,5 @@
-# ech-landing-form-generator (With WATI auto send whatsapp msg)
+# ech-landing-form-generator 
+### Added WATI auto send whatsapp msg function in this version
 A Wordpress plugin to generate a responsive lead form for ECH company's brand websites. It is integrated with ECH marketing system (MSP). Form data will be passed and stored in the MSP for future use.   
 
 
@@ -30,6 +31,8 @@ Based on the form requirments and MSP campaigns, change the attributes or values
 - **hdyhau_item** (Multiple Strings)(*): "How did you hear about us" items. Eg. `"Facebook, Google"`
 - **brand** (String): This will override the global setting "brand name" value which is set in the dashboard. 
 - **tks_para**(String): url parameter needs to pass to thank you page, usually product/treatment name. It is used for traffic tracking. Eg. `https://xxx.com/thanks?prod=TKS_PARA_VALUE`
+- **wati_pay**(INT): enable or disable the WATI auto send Whatsapp msg function. 0 = disable, 1 = enable. Default is 0. 
+- **wati_msg**(String): insert wati msg template name
 
 Below attributes values must be corresponding to each other, otherwise no form will be generated:
 1. r and r_code
