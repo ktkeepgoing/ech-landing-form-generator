@@ -10,6 +10,7 @@ WP version tested up to: 6.1
 * Added WATI auto send Whatsapp msg function. 
 * Added 2 shortcode attributes "wati_send" and "wati_msg"
 * Applied strtolower() to "r" and $_GET['r'] values. 
+* Removed delete database data action when uninstall the app. Avoid to input the form dashboard data agin when re-install the plugin.
 
 
 = 2.0 =
