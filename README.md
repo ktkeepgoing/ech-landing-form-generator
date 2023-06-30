@@ -1,4 +1,5 @@
 # ech-landing-form-generator
+### with WATI auto send Whatsapp msg function
 A Wordpress plugin to generate a responsive lead form for ECH company's brand websites. It is integrated with ECH marketing system (MSP). Form data will be passed and stored in the MSP for future use.   
 
 
@@ -13,7 +14,7 @@ Based on the form requirments and MSP campaigns, change the attributes or values
 
 - **default_r** (String): default tcode, default is t200
 - **default_r_code** (String)(*)[^1]: default tcode MSP token
-- **r** (Multiple Strings)[^2]: tcode eg.`"t575, t127"`. If there are more than one tcodes using the same tcode token, use `|` to separate them. Eg. `"t575,t575g|t127,t127fb"`
+- **r** (Multiple Strings)[^2]: tcode eg.`"t575, t127"`. If there are more than one tcodes using the same tcode token, use `|` to separate them. Eg. `"t575,t575g|t127,t127fb"`. All case insensitive.
 - **r_code** (Multiple Strings): tcode token. Eg. `"TCODE1234, TCOED5678"`
 - **email_required** (INT): 0 = false, 1 = true. Default is 1.
 - **item** (Multiple Strings)(*)[^1]: item checkbox
@@ -30,6 +31,8 @@ Based on the form requirments and MSP campaigns, change the attributes or values
 - **hdyhau_item** (Multiple Strings)(*): "How did you hear about us" items. Eg. `"Facebook, Google"`
 - **brand** (String): This will override the global setting "brand name" value which is set in the dashboard. 
 - **tks_para**(String): url parameter needs to pass to thank you page, usually product/treatment name. It is used for traffic tracking. Eg. `https://xxx.com/thanks?prod=TKS_PARA_VALUE`
+- **wati_send**(INT): enable or disable the WATI auto send Whatsapp msg function. 0 = disable, 1 = enable. Default is 0.
+- **wati_msg**(String): insert wati msg template name (provided by marketers)
 
 Below attributes values must be corresponding to each other, otherwise no form will be generated:
 1. r and r_code

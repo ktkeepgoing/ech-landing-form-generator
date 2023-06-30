@@ -6,6 +6,12 @@ WP version tested up to: 6.1
 
 == Changelog ==
 
+= 3.0 = 2023-06-30 =
+* Added WATI auto send Whatsapp msg function. 
+* Added 2 shortcode attributes "wati_send" and "wati_msg"
+* Applied strtolower() to "r" and $_GET['r'] values. 
+
+
 = 2.0 =
 * Added dashboard settings. 
 * Added options to choose whether connect to DEV or LIVE MSP API

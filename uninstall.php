@@ -31,7 +31,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // delete options in wp_options DB when uninstall the plugin
-delete_option('ech_lfg_apply_test_msp');
+/* delete_option('ech_lfg_apply_test_msp');
 delete_option('ech_lfg_brand_name');
 delete_option('ech_lfg_submitBtn_color');
 delete_option('ech_lfg_submitBtn_hoverColor');
@@ -40,6 +40,6 @@ delete_option('ech_lfg_submitBtn_text_hoverColor');
 delete_option('ech_lfg_apply_recapt');
 delete_option('ech_lfg_recapt_site_key');
 delete_option('ech_lfg_recapt_secret_key');
-delete_option('ech_lfg_recapt_score');
+delete_option('ech_lfg_recapt_score'); */
 
 
