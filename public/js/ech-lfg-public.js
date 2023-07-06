@@ -62,7 +62,7 @@
 		
 	
 		/*********** Form Submit ***********/
-		jQuery('#ech_lfg_form').on("submit", function(e){
+		jQuery('.ech_lfg_form').on("submit", function(e){
 			e.preventDefault();
 	
 			var r = jQuery(this).data("r");
@@ -80,43 +80,42 @@
 			
 	
 			var items = [];
-			jQuery.each(jQuery("#ech_lfg_form input[name='item']:checked"), function(){
+			jQuery.each(jQuery(this).find("input[name='item']:checked"), function(){
 				items.push(jQuery(this).val());
 			});
 	
 			if(has_select_dr == 1) {
-				var _selectDr = jQuery("#ech_lfg_form #select_dr").val();
+				var _selectDr = jQuery(this).find("select[name='select_dr']").val();
 				items.push(_selectDr);
 			}
 	
-	
-			var _name = jQuery("#ech_lfg_form #last_name").val() + " " + jQuery("#ech_lfg_form #first_name").val(),
+			var _name = jQuery(this).find("input[name='last_name']").val() + " " + jQuery(this).find("input[name='first_name']").val(),
 				_user_ip = ip,
 				_source = r,
 				_token = c_token,
 				_website_name = brand,
 				_website_url = url,
-				_tel_prefix = jQuery("#ech_lfg_form #tel_prefix").val(),
-				_tel = jQuery("#ech_lfg_form #tel").val(),
-				_email = jQuery("#ech_lfg_form #email").val(),
-				_age_group = jQuery("#ech_lfg_form #age").val(),
-				_booking_date = jQuery("#ech_lfg_form .lfg_datepicker").val(),
-				_booking_time = jQuery("#ech_lfg_form .lfg_timepicker").val(),
+				_tel_prefix = jQuery(this).find("select[name='telPrefix']").val(),
+				_tel = jQuery(this).find("input[name='tel']").val(),
+				_email = jQuery(this).find("input[name='email']").val(),
+				_age_group = jQuery(this).find("input[name='age']").val(),
+				_booking_date = jQuery(this).find(".lfg_datepicker").val(),
+				_booking_time = jQuery(this).find(".lfg_timepicker").val(),
 				_remarks = "";
 	
 			if (shop_count <=3){
-				var _shop_area_code = jQuery('input[name=shop]:checked', '#ech_lfg_form').val();
+				var _shop_area_code = jQuery(this).find('input[name=shop]:checked').val();
 			} else {
-				var _shop_area_code = jQuery('#ech_lfg_form #shop').val();
+				var _shop_area_code = jQuery(this).find('select[name=shop]').val();
 			}
 	
 			
 			if(has_textarea == 1) {
-				_remarks += jQuery("#ech_lfg_form #remarks").val();
+				_remarks += jQuery(this).find("textarea[name='remarks']").val();
 			}
 	
 			if(has_hdyhau == 1) {
-				_remarks += " | 途徑得知: " + jQuery("#ech_lfg_form #select_hdyhau").val();
+				_remarks += " | 途徑得知: " + jQuery(this).find("select[name='select_hdyhau']").val();
 			}
 
 			if(has_wati_send == 1) {
@@ -125,20 +124,20 @@
 	
 	
 			if(( _tel_prefix == "+852" && _tel.length != 8 ) || ( _tel_prefix == "+853" && _tel.length != 8 ) ) {
-				jQuery(".lfg_formMsg").html("+852, +853電話必需8位數字(沒有空格)");
+				jQuery(this).find(".lfg_formMsg").html("+852, +853電話必需8位數字(沒有空格)");
 				return false;
 			} else if((_tel_prefix == "+86" && _tel.length != 11)) {
-				jQuery(".lfg_formMsg").html("+86電話必需11位數字(沒有空格)");
+				jQuery(this).find(".lfg_formMsg").html("+86電話必需11位數字(沒有空格)");
 				return false;
 			} else {
-				var checked_item_count = jQuery("#ech_lfg_form input[name='item']:checked").length;
+				var checked_item_count = jQuery(this).find("input[name='item']:checked").length;
 				if( checked_item_count == 0) {
-					jQuery(".lfg_formMsg").html("請選擇咨詢項目");
+					jQuery(this).find(".lfg_formMsg").html("請選擇咨詢項目");
 					return false;
 				} else {
-					jQuery("#ech_lfg_form #submitBtn").prop('disabled', true);
-					jQuery(".lfg_formMsg").html("提交中...");
-					jQuery("#ech_lfg_form #submitBtn").html("提交中...");
+					jQuery(".ech_lfg_form button[type=submit]").prop('disabled', true);
+					jQuery(this).find(".lfg_formMsg").html("提交中...");
+					jQuery(".ech_lfg_form button[type=submit]").html("提交中...");
 
 					// if apply reCAPTCHA
 					var applyRecapt = jQuery(this).data("apply-recapt");

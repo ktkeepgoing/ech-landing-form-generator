@@ -369,19 +369,19 @@ class Ech_Lfg_Public
 		// *********** (END) Check if apply reCAPTCHA v3 ***************/
 
 		$output .= '
-		<div class="lfg_formMsg"></div>
-		<form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="' . $item_limited_num . '" data-r="' . $r . '" data-c-token="' . $c_token . '" data-shop-count="' . $shop_count . '" data-ajaxurl="' . get_admin_url(null, 'admin-ajax.php') . '" data-ip="' . $ip . '" data-url="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '" data-has-textarea="' . $has_textarea . '" data-has-select-dr="' . $has_dr . '" data-item-label="' . $item_label . '" data-tks-para="' . $tks_para . '" data-brand="' . $brand . '" data-has-hdyhau="' . $has_hdyhau . '" data-apply-recapt="'.get_option('ech_lfg_apply_recapt').'" data-recapt-site-key="'. get_option('ech_lfg_recapt_site_key') .'" data-recapt-score="'.get_option('ech_lfg_recapt_score').'" data-wati-send="'. $wati_send .'" data-wati-msg="'.$wati_msg.'" data-epay-refcode="LPE_'.trim($brand).$rand.time().'">
+		<form class="ech_lfg_form" id="ech_lfg_form" action="" method="post" data-limited-no="' . $item_limited_num . '" data-r="' . $r . '" data-c-token="' . $c_token . '" data-shop-count="' . $shop_count . '" data-ajaxurl="' . get_admin_url(null, 'admin-ajax.php') . '" data-ip="' . $ip . '" data-url="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '" data-has-textarea="' . $has_textarea . '" data-has-select-dr="' . $has_dr . '" data-item-label="' . $item_label . '" data-tks-para="' . $tks_para . '" data-brand="' . $brand . '" data-has-hdyhau="' . $has_hdyhau . '" data-apply-recapt="'.get_option('ech_lfg_apply_recapt').'" data-recapt-site-key="'. get_option('ech_lfg_recapt_site_key') .'" data-recapt-score="'.get_option('ech_lfg_recapt_score').'" >
+			<div class="lfg_formMsg"></div>
 			<div class="form_row">
 				<input type="hidden" name="booking_time" value="">
 			</div>
-		<div class="form_row">
-			<div>
+		<div class="form_row customer_info">
+			<div data-ech-field="last_name">
 				<input type="text" name="last_name" id="last_name"  class="form-control"  placeholder="*姓氏" pattern="[ A-Za-z\u3000\u3400-\u4DBF\u4E00-\u9FFF]{1,}"  size="40" required >
 			</div>
-			<div>
+			<div data-ech-field="first_name">
 				<input type="text" name="first_name" id="first_name" class="form-control" placeholder="*名字" pattern="[ A-Za-z\u3000\u3400-\u4DBF\u4E00-\u9FFF]{1,}" size="40" required >
 			</div>
-			<div>
+			<div data-ech-field="telPrefix">
 				<select  class="form-control" name="telPrefix" id="tel_prefix" style="width: 100%;" required >
 					<option disabled="" selected="" value="">*請選擇</option>
 					<option value="+852">+852</option>
@@ -389,13 +389,13 @@ class Ech_Lfg_Public
 					<option value="+86">+86</option> 
 				</select>
 			</div>
-			<div>
+			<div data-ech-field="tel">
 				<input type="text" name="tel" placeholder="*電話"  class="form-control" size="30" id="tel" pattern="[0-9]{8,11}" required >
 			</div>
 			';
 
 		//**** Email
-		$output .= '<div>';
+		$output .= '<div data-ech-field="email">';
 		if ($email_required_bool) {
 			$output .= '<input type="email" name="email" id="email" placeholder="*電郵" class="form-control" size="40" required>';
 		} else {
@@ -412,7 +412,7 @@ class Ech_Lfg_Public
 
 		//******* Choose doctor if any
 		if ($has_dr_bool) {
-			$output .= '<div>';
+			$output .= '<div data-ech-field="select_dr">';
 			$output .= '<select  class="form-control" name="select_dr" id="select_dr" style="width: 100%;" required >';
 			$output .= '<option disabled="" selected="" value="">*請選擇醫生</option>';
 			for ($i = 0; $i < count($paraArr['dr']); $i++) {
@@ -424,10 +424,10 @@ class Ech_Lfg_Public
 		//******* (END) Choose doctor if any
 
 		$output .= '
-		<div>
-			<input type="text" placeholder="*預約日期" id="booking_date" class="form-control lfg_datepicker" name="booking_date" autocomplete="off" value="" size="40" required>
+		<div data-ech-field="booking_date">
+			<input type="text" placeholder="*預約日期" class="form-control lfg_datepicker" name="booking_date" autocomplete="off" value="" size="40" required>
 		</div>
-		<div>
+		<div data-ech-field="booking_time">
 				<input type="text" placeholder="*預約時間" id="booking_time" class="form-control lfg_timepicker ui-timepicker-input" name="booking_time" autocomplete="off" value="" size="40" required="">
 		</div>';
 
@@ -438,7 +438,7 @@ class Ech_Lfg_Public
 		//**** Location Options
 		$output .= '
 		<div class="form_row">
-			<div>';
+			<div data-ech-field="shop">';
 		if ($shop_count <= 3) {
 			// radio
 			$output .= '<label>' . $shop_label . '</label><br>';
@@ -471,7 +471,7 @@ class Ech_Lfg_Public
 		//**** Item Options
 		$output .= '
 		<div class="form_row">
-			<div>';
+			<div data-ech-field="item">';
 
 		if (count($paraArr['item']) == 1) {
 			$output .= '<label>' . $item_label . '</label><br>';
@@ -519,7 +519,7 @@ class Ech_Lfg_Public
 		if ($has_textarea_bool) {
 			$output .= '
 			<div class="form_row">
-				<div>
+				<div data-ech-field="remarks">
 					<textarea class="form-control" type="textarea" name="remarks" id="remarks" placeholder="' . $textarea_label . '" maxlength="140" rows="7"></textarea>
 				</div>
 			</div>
@@ -532,7 +532,7 @@ class Ech_Lfg_Public
 
 		//**** HOW DID YOU HEAR ABOUT US
 		if ($has_hdyhau_bool) {
-			$output .= '<div class="form_row"><div>';
+			$output .= '<div class="form_row"><div data-ech-field="select_hdyhau">';
 			$output .= '<select  class="form-control" name="select_hdyhau" id="select_hdyhau" style="width: 100%;" >';
 			$output .= '<option disabled="" selected="" value="">從以下那一種途徑得知我們?</option>';
 			for ($i = 0; $i < count($paraArr['hdyhau_item']); $i++) {
@@ -547,7 +547,8 @@ class Ech_Lfg_Public
 
 		$output .= ' 
 			<div class="form_row">
-				<div>
+								<div data-ech-field="info_remark">
+
 					<p class="redWord">本中心將與您聯絡確認詳情，方為確實是次預約。</p>
 					<label><input type="checkbox" class="agree"  value="agreed_policy" name="info_remark[]" checked required > * 本人已閱讀並同意有關 <a href="https://echealthcare.com/zh/privacy-policy"   target="_blank">私隱政策聲明</a>。</label>
 					<small> *必需填寫</small>
